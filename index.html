@@ -103,6 +103,20 @@
         }
         .sos-card { animation: pulse-border 2s infinite; }
         
+        /* 翻譯頁 Tab 切換 */
+        .translate-tab-btn { transition: all 0.2s ease; }
+        .translate-tab-btn.active { background-color: #ef4444; color: white; box-shadow: 0 4px 12px rgba(239,68,68,0.3); }
+        .translate-panel { display: none; }
+        .translate-panel.active { display: block; animation: fadeIn 0.3s ease-out; }
+        
+        /* 對話卡片 */
+        .phrase-card { transition: all 0.25s ease; cursor: pointer; }
+        .phrase-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+        .phrase-card .jp-text { transition: all 0.25s ease; }
+        .phrase-detail { display: none; }
+        .phrase-card.expanded .phrase-detail { display: block; }
+        .phrase-card.expanded { background-color: #eff6ff; border-color: #bfdbfe; }
+        
         /* 自定義 Checkbox */
         .custom-checkbox {
             appearance: none;
@@ -713,72 +727,564 @@
         </section>
 
         <!-- ======================= -->
-        <!-- SECTION: 飲食SOS (SOS)  -->
+        <!-- SECTION: 旅遊翻譯中心 (SOS)  -->
         <!-- ======================= -->
-        <section id="sos" class="section-content pt-16 pb-6 px-5 h-screen">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-black text-dark">飲食需求卡</h2>
-                <p class="text-sm text-gray-500 mt-1">點餐時請直接將此畫面出示給服務人員</p>
+        <section id="sos" class="section-content pt-16 pb-6 px-5 min-h-screen">
+            <!-- 頁面標題 -->
+            <div class="text-center mb-5">
+                <div class="inline-flex items-center bg-red-50 text-red-500 px-3 py-1 rounded-full text-xs font-bold mb-2 border border-red-100">
+                    <i class="fa-solid fa-language mr-1.5"></i> 翻譯幫助卡片
+                </div>
+                <h2 class="text-2xl font-black text-dark">旅遊翻譯中心</h2>
+                <p class="text-sm text-gray-500 mt-1">需要時直接出示給服務人員看</p>
             </div>
 
-            <!-- SOS 閃爍卡片 -->
-            <div class="sos-card bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-primary relative">
-                <!-- 裝飾折角 -->
-                <div class="absolute -top-6 -right-6 w-16 h-16 bg-red-100 rotate-45 transform origin-bottom-left"></div>
-                
-                <div class="bg-red-500 py-3 px-5 text-center">
-                    <span class="text-white font-black tracking-widest text-lg"><i class="fa-solid fa-circle-exclamation mr-2"></i>お願い / PLEASE</span>
+            <!-- 頁面 Tab 切換 -->
+            <div class="flex space-x-2 mb-5 bg-gray-100 p-1 rounded-2xl">
+                <button onclick="switchTranslateTab('food')" id="ttab-food" class="translate-tab-btn active flex-1 py-2 px-3 rounded-xl text-sm font-bold text-gray-500 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-utensils text-xs"></i>飲食需求
+                </button>
+                <button onclick="switchTranslateTab('fuel')" id="ttab-fuel" class="translate-tab-btn flex-1 py-2 px-3 rounded-xl text-sm font-bold text-gray-500 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-gas-pump text-xs"></i>加油
+                </button>
+                <button onclick="switchTranslateTab('phrases')" id="ttab-phrases" class="translate-tab-btn flex-1 py-2 px-3 rounded-xl text-sm font-bold text-gray-500 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-comment-dots text-xs"></i>旅遊對話
+                </button>
+            </div>
+
+            <!-- ===== Panel 1: 飲食需求 ===== -->
+            <div id="tpanel-food" class="translate-panel active">
+                <!-- 說明提示 -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 mb-4 flex items-start gap-2.5">
+                    <i class="fa-solid fa-circle-info text-amber-500 mt-0.5 flex-shrink-0"></i>
+                    <p class="text-xs text-amber-800 leading-relaxed">每個人的飲食需求不同，請先<strong>選擇對應的人</strong>，再出示翻譯卡給餐廳人員看。</p>
                 </div>
-                
-                <div class="p-6">
-                    <div class="text-center space-y-4">
-                        <p class="text-xl font-bold text-dark leading-relaxed">
-                            私たちは、
+
+                <!-- 人物選擇器 -->
+                <div class="grid grid-cols-3 gap-2 mb-5">
+                    <button onclick="switchDietCard('linle')" id="diet-btn-linle"
+                        class="diet-person-btn active flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-green-400 bg-green-50 transition-all">
+                        <span class="text-2xl">😊</span>
+                        <span class="text-xs font-black text-green-700">霖 &amp; 樂</span>
+                        <span class="text-[10px] text-green-600 bg-green-100 px-1.5 py-0.5 rounded-full font-bold">無限制</span>
+                    </button>
+                    <button onclick="switchDietCard('ziv')" id="diet-btn-ziv"
+                        class="diet-person-btn flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-gray-200 bg-white transition-all">
+                        <span class="text-2xl">🙅</span>
+                        <span class="text-xs font-black text-gray-700">Ziv</span>
+                        <span class="text-[10px] text-red-600 bg-red-50 px-1.5 py-0.5 rounded-full font-bold">牛・馬 NG</span>
+                    </button>
+                    <button onclick="switchDietCard('jan')" id="diet-btn-jan"
+                        class="diet-person-btn flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-gray-200 bg-white transition-all">
+                        <span class="text-2xl">🙅</span>
+                        <span class="text-xs font-black text-gray-700">Jan</span>
+                        <span class="text-[10px] text-red-600 bg-red-50 px-1.5 py-0.5 rounded-full font-bold">牛・馬・羊 NG</span>
+                    </button>
+                </div>
+
+                <!-- 翻譯卡：霖 & 樂（無限制） -->
+                <div id="diet-card-linle" class="diet-card">
+                    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-green-400 relative">
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-green-100 rotate-45 transform origin-bottom-left"></div>
+                        <div class="bg-green-500 py-3 px-5 text-center">
+                            <span class="text-white font-black tracking-widest text-lg">
+                                <i class="fa-solid fa-user mr-2"></i>霖 &amp; 樂
+                            </span>
+                        </div>
+                        <div class="p-6 text-center">
+                            <div class="flex items-center justify-center bg-green-50 p-5 rounded-2xl border border-green-100 mb-4">
+                                <i class="fa-solid fa-circle-check text-green-500 text-3xl mr-4"></i>
+                                <div class="text-left">
+                                    <p class="text-xl font-black text-green-700">何でも食べられます！</p>
+                                    <p class="text-sm text-green-600 mt-1">什麼都可以吃！</p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                                <p class="text-sm font-bold text-gray-700">牛肉・馬肉・羊肉・豚肉・<br>鶏肉・魚・野菜 — 全部OK！</p>
+                                <p class="text-xs text-gray-500 mt-1.5">牛肉、馬肉、羊肉、豬肉、<br>雞肉、海鮮、蔬菜⋯全都OK！</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-green-50 border border-green-200 rounded-2xl p-4">
+                        <p class="text-xs text-green-800 font-medium text-center">
+                            <i class="fa-solid fa-circle-check text-green-500 mr-1"></i>
+                            霖和樂沒有飲食限制，所有料理都可以盡情享用！
                         </p>
-                        <div class="bg-red-50 py-3 rounded-xl border border-red-100 transform rotate-1 my-4">
-                            <p class="text-3xl font-black text-red-600 underline decoration-red-300 decoration-4 underline-offset-4">
-                                牛・馬・羊の肉
+                    </div>
+                </div>
+
+                <!-- 翻譯卡：Ziv（不吃牛+馬） -->
+                <div id="diet-card-ziv" class="diet-card hidden">
+                    <div class="sos-card bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-primary relative">
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-red-100 rotate-45 transform origin-bottom-left"></div>
+                        <div class="bg-red-500 py-3 px-5 text-center">
+                            <span class="text-white font-black tracking-widest text-lg">
+                                <i class="fa-solid fa-circle-exclamation mr-2"></i>Ziv — お願い
+                            </span>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-center space-y-3">
+                                <p class="text-xl font-bold text-dark leading-relaxed">私は、</p>
+                                <div class="bg-red-50 py-3 px-4 rounded-xl border border-red-100 transform rotate-1 my-3">
+                                    <p class="text-3xl font-black text-red-600 underline decoration-red-300 decoration-4 underline-offset-4">
+                                        牛肉・馬肉
+                                    </p>
+                                </div>
+                                <p class="text-xl font-bold text-dark leading-relaxed">を食べることができません。</p>
+                            </div>
+                            <div class="my-5 border-b border-dashed border-gray-300"></div>
+                            <div class="flex items-center justify-center bg-green-50 p-4 rounded-xl text-center">
+                                <i class="fa-solid fa-circle-check text-green-500 text-xl mr-3 flex-shrink-0"></i>
+                                <p class="text-base font-bold text-green-800">
+                                    豚肉・鶏肉・<span class="text-green-600">羊肉</span>・魚・野菜<br>
+                                    <span class="text-sm font-medium">は大丈夫です。（食べられます）</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 中文說明 -->
+                    <div class="mt-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-500 mb-2 flex items-center"><i class="fa-solid fa-language text-blue-400 mr-1.5"></i>中文說明</p>
+                        <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg leading-relaxed">
+                            Ziv 無法食用<span class="font-bold text-red-500">牛肉、馬肉</span>。<span class="text-green-600 font-bold">羊肉</span>、豬肉、雞肉、海鮮及蔬菜皆可食用。
+                        </p>
+                    </div>
+                    <!-- 避雷字眼 -->
+                    <div class="mt-3 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-700 mb-2"><span class="text-red-500 mr-1">❌</span>避開字眼</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-red-50 text-red-800 text-xs font-bold p-2.5 rounded-xl text-center border border-red-100">🐮 牛肉 (Gyuniku)</div>
+                            <div class="bg-red-50 text-red-800 text-xs font-bold p-2.5 rounded-xl text-center border border-red-100">🍔 ビーフ (Beef)</div>
+                            <div class="bg-red-50 text-red-800 text-xs font-bold p-2.5 rounded-xl text-center border border-red-100">🐴 馬刺し (Basashi)</div>
+                            <div class="bg-green-50 text-green-700 text-xs font-bold p-2.5 rounded-xl text-center border border-green-100">🐑 マトン ✅ OK</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 翻譯卡：Jan（不吃牛+馬+羊） -->
+                <div id="diet-card-jan" class="diet-card hidden">
+                    <div class="sos-card bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-primary relative">
+                        <div class="absolute -top-6 -right-6 w-16 h-16 bg-red-100 rotate-45 transform origin-bottom-left"></div>
+                        <div class="bg-red-500 py-3 px-5 text-center">
+                            <span class="text-white font-black tracking-widest text-lg">
+                                <i class="fa-solid fa-circle-exclamation mr-2"></i>Jan — お願い
+                            </span>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-center space-y-3">
+                                <p class="text-xl font-bold text-dark leading-relaxed">私は、</p>
+                                <div class="bg-red-50 py-3 px-4 rounded-xl border border-red-100 transform rotate-1 my-3">
+                                    <p class="text-3xl font-black text-red-600 underline decoration-red-300 decoration-4 underline-offset-4">
+                                        牛肉・馬肉・羊肉
+                                    </p>
+                                </div>
+                                <p class="text-xl font-bold text-dark leading-relaxed">を食べることができません。</p>
+                            </div>
+                            <div class="my-5 border-b border-dashed border-gray-300"></div>
+                            <div class="flex items-center justify-center bg-green-50 p-4 rounded-xl text-center">
+                                <i class="fa-solid fa-circle-check text-green-500 text-xl mr-3 flex-shrink-0"></i>
+                                <p class="text-base font-bold text-green-800">
+                                    豚肉・鶏肉・魚・野菜<br>
+                                    <span class="text-sm font-medium">は大丈夫です。（食べられます）</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 中文說明 -->
+                    <div class="mt-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-500 mb-2 flex items-center"><i class="fa-solid fa-language text-blue-400 mr-1.5"></i>中文說明</p>
+                        <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg leading-relaxed">
+                            Jan 無法食用<span class="font-bold text-red-500">牛肉、馬肉、羊肉</span>。豬肉、雞肉、海鮮及蔬菜皆可食用。
+                        </p>
+                    </div>
+                    <!-- 避雷字眼 -->
+                    <div class="mt-3 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                        <p class="text-xs font-bold text-gray-700 mb-2"><span class="text-red-500 mr-1">❌</span>避開字眼</p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-red-50 text-red-800 text-xs font-bold p-2.5 rounded-xl text-center border border-red-100">🐮 牛肉 (Gyuniku)</div>
+                            <div class="bg-red-50 text-red-800 text-xs font-bold p-2.5 rounded-xl text-center border border-red-100">🍔 ビーフ (Beef)</div>
+                            <div class="bg-red-50 text-red-800 text-xs font-bold p-2.5 rounded-xl text-center border border-red-100">🐴 馬刺し (Basashi)</div>
+                            <div class="bg-red-50 text-red-800 text-xs font-bold p-2.5 rounded-xl text-center border border-red-100">🐑 マトン (Mutton)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-6"></div>
+            </div>
+
+            <!-- ===== Panel 2: 加油翻譯卡 ===== -->
+            <div id="tpanel-fuel" class="translate-panel">
+                <!-- 加油翻譯主卡 -->
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden border-2 border-blue-500 relative">
+                    <div class="absolute -top-6 -right-6 w-16 h-16 bg-blue-100 rotate-45 transform origin-bottom-left"></div>
+                    
+                    <div class="bg-blue-500 py-3 px-5 text-center flex items-center justify-center">
+                        <i class="fa-solid fa-gas-pump text-white mr-2 text-xl"></i>
+                        <span class="text-white font-black tracking-widest text-lg">給油 / REFUEL</span>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="text-center space-y-4">
+                            <p class="text-xl font-bold text-dark leading-relaxed">すみません、</p>
+                            <div class="bg-blue-50 py-3 rounded-xl border border-blue-100 transform -rotate-1 my-4">
+                                <p class="text-3xl font-black text-blue-600 underline decoration-blue-300 decoration-4 underline-offset-4">
+                                    レギュラー満タン
+                                </p>
+                            </div>
+                            <p class="text-xl font-bold text-dark leading-relaxed">でお願いします。</p>
+                        </div>
+                        
+                        <div class="my-6 border-b border-dashed border-gray-300"></div>
+                        
+                        <div class="flex items-center justify-center bg-gray-50 p-4 rounded-xl text-center">
+                            <p class="text-sm font-bold text-gray-700">
+                                （不好意思，請幫我加滿一般汽油）<br>
+                                <span class="text-xs text-red-500 mt-1 block"><i class="fa-solid fa-droplet mr-1"></i> 請認明紅色油槍 (Regular)</span>
                             </p>
                         </div>
-                        <p class="text-xl font-bold text-dark leading-relaxed">
-                            を食べることができません。
-                        </p>
                     </div>
-                    
-                    <div class="my-6 border-b border-dashed border-gray-300"></div>
-                    
-                    <div class="flex items-center justify-center bg-green-50 p-4 rounded-xl text-center">
-                        <i class="fa-solid fa-circle-check text-green-500 text-xl mr-3"></i>
-                        <p class="text-base font-bold text-green-800">
-                            豚肉・鶏肉・魚・野菜<br>
-                            <span class="text-sm font-medium">は大丈夫です。（食べられます）</span>
-                        </p>
+                </div>
+
+                <!-- 加油小知識 -->
+                <div class="mt-5 bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center">
+                        <i class="fa-solid fa-circle-info text-blue-500 mr-2"></i> 日本加油站小知識
+                    </h3>
+                    <div class="space-y-2.5">
+                        <div class="flex items-start gap-3 bg-blue-50 p-3 rounded-xl border border-blue-100">
+                            <span class="text-lg">⛽</span>
+                            <div>
+                                <p class="text-xs font-bold text-blue-800">一般自駕租車加「レギュラー (Regular)」</p>
+                                <p class="text-xs text-blue-600 mt-0.5">對應台灣的 92 無鉛汽油，油槍為紅色</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-amber-50 p-3 rounded-xl border border-amber-100">
+                            <span class="text-lg">💴</span>
+                            <div>
+                                <p class="text-xs font-bold text-amber-800">加滿費用約 6,000～8,000 日圓</p>
+                                <p class="text-xs text-amber-600 mt-0.5">視車箱大小與剩餘油量而定，建議準備現金</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3 bg-green-50 p-3 rounded-xl border border-green-100">
+                            <span class="text-lg">🏪</span>
+                            <div>
+                                <p class="text-xs font-bold text-green-800">還車前務必加滿油</p>
+                                <p class="text-xs text-green-600 mt-0.5">建議在還車地點附近的加油站補滿，避免額外收費</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-6"></div>
+            </div>
+
+            <!-- ===== Panel 3: 旅遊常用對話 ===== -->
+            <div id="tpanel-phrases" class="translate-panel">
+                <!-- 分類 Tab -->
+                <div class="flex space-x-2 overflow-x-auto pb-1 hide-scrollbar mb-4">
+                    <button onclick="switchPhraseCategory('route')" id="pcat-route" class="phrase-cat-btn flex-none py-1.5 px-3 rounded-xl text-xs font-bold bg-gray-800 text-white shadow transition-all">🗺️ 問路</button>
+                    <button onclick="switchPhraseCategory('shop')" id="pcat-shop" class="phrase-cat-btn flex-none py-1.5 px-3 rounded-xl text-xs font-bold bg-white text-gray-500 border border-gray-200 shadow-sm transition-all">🛍️ 購物</button>
+                    <button onclick="switchPhraseCategory('food')" id="pcat-food" class="phrase-cat-btn flex-none py-1.5 px-3 rounded-xl text-xs font-bold bg-white text-gray-500 border border-gray-200 shadow-sm transition-all">🍜 美食</button>
+                    <button onclick="switchPhraseCategory('hotel')" id="pcat-hotel" class="phrase-cat-btn flex-none py-1.5 px-3 rounded-xl text-xs font-bold bg-white text-gray-500 border border-gray-200 shadow-sm transition-all">🏨 住宿</button>
+                    <button onclick="switchPhraseCategory('emergency')" id="pcat-emergency" class="phrase-cat-btn flex-none py-1.5 px-3 rounded-xl text-xs font-bold bg-white text-gray-500 border border-gray-200 shadow-sm transition-all">🆘 緊急</button>
+                </div>
+
+                <p class="text-xs text-gray-400 text-center mb-4"><i class="fa-solid fa-hand-pointer mr-1"></i>點擊卡片展開詳細說明</p>
+
+                <!-- 問路 -->
+                <div id="phrases-route" class="phrase-category space-y-3">
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">〇〇はどこですか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">OO 在哪裡？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500 mb-2">💡 使用方式：將目的地名稱替換 〇〇，直接出示給路人看</p>
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-base">熊本城はどこですか？</p>
+                                <p class="text-xs text-blue-600 mt-1">熊本城在哪裡？</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">ここまでお願いします</p>
+                                <p class="text-xs text-gray-400 mt-0.5">請送我到這裡（搭計程車用）</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500 mb-2">💡 搭計程車時，將手機地圖出示給司機，並說這句話</p>
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-sm">ここまでお願いします。</p>
+                                <p class="text-xs text-blue-600 mt-1">請送我到這個地方（指著地圖上的目的地）</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">写真を撮ってもらえますか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">可以幫我們拍照嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500 mb-2">💡 請路人或店員幫忙拍照的萬用句</p>
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-sm">すみません、写真を撮ってもらえますか？</p>
+                                <p class="text-xs text-blue-600 mt-1">不好意思，可以幫我們拍照嗎？</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">歩いて何分かかりますか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">走路需要幾分鐘？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">詢問步行距離的實用句型</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 購物 -->
+                <div id="phrases-shop" class="phrase-category space-y-3 hidden">
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">これはいくらですか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">這個多少錢？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500 mb-2">💡 指著商品問價格</p>
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-sm">すみません、これはいくらですか？</p>
+                                <p class="text-xs text-blue-600 mt-1">不好意思，這個多少錢？</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">カードで払えますか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">可以刷卡嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500 mb-2">💡 確認可否刷卡的必備句</p>
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-sm">カードで払えますか？</p>
+                                <p class="text-xs text-blue-600 mt-1">請問可以用信用卡支付嗎？</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">袋はいりません</p>
+                                <p class="text-xs text-gray-400 mt-0.5">不需要袋子（環保）</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">在便利商店或超市購物時的環保用語</p>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">免税はできますか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">可以退稅嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <div class="bg-amber-50 rounded-xl p-3 border border-amber-100">
+                                <p class="text-xs font-bold text-amber-800">💡 備妥護照，單店消費未稅 5,000 日圓以上可申請退稅</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 美食 -->
+                <div id="phrases-food" class="phrase-category space-y-3 hidden">
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">〇名です、予約しています</p>
+                                <p class="text-xs text-gray-400 mt-0.5">我有訂位，〇人</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-sm">4名です、予約しています。</p>
+                                <p class="text-xs text-blue-600 mt-1">我們有訂位，共 4 位。（將數字替換為實際人數）</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">おすすめは何ですか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">你們有什麼推薦的料理？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">詢問店員招牌菜，讓對方推薦最好的料理</p>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">おいしかったです！</p>
+                                <p class="text-xs text-gray-400 mt-0.5">非常好吃！</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">對店家表達感謝，是最受歡迎的一句話！</p>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">お会計をお願いします</p>
+                                <p class="text-xs text-gray-400 mt-0.5">麻煩結帳</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">用餐完畢結帳時使用，也可以舉手示意後說這句</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 住宿 -->
+                <div id="phrases-hotel" class="phrase-category space-y-3 hidden">
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">チェックインをお願いします</p>
+                                <p class="text-xs text-gray-400 mt-0.5">我要辦理入住</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-sm">チェックインをお願いします。〇〇という名前で予約しています。</p>
+                                <p class="text-xs text-blue-600 mt-1">我要辦理入住，訂房名稱是〇〇。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">Wifi のパスワードを教えてください</p>
+                                <p class="text-xs text-gray-400 mt-0.5">請告訴我 WiFi 密碼</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">入住第一件事：詢問 WiFi 密碼！</p>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">チェックアウトをお願いします</p>
+                                <p class="text-xs text-gray-400 mt-0.5">我要辦理退房</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">退房時向櫃台說，並交還房卡</p>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">荷物を預かってもらえますか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">可以幫我保管行李嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">退房後、還未離開的那段時間，請飯店幫您暫存行李</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 緊急 -->
+                <div id="phrases-emergency" class="phrase-category space-y-3 hidden">
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-red-200 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-red-600">助けてください！</p>
+                                <p class="text-xs text-gray-400 mt-0.5">救命！請幫幫我！</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-red-100">
+                            <div class="bg-red-50 rounded-xl p-3 border border-red-100">
+                                <p class="text-xs font-bold text-red-700">緊急狀況下大聲呼叫此語句。日本緊急電話：🚒 消防119 / 🚔 警察110</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-red-200 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-red-600">病院はどこですか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">醫院在哪裡？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-red-100">
+                            <div class="bg-red-50 rounded-xl p-3 border border-red-100">
+                                <p class="text-xs font-bold text-red-700">日本救護車電話：119（免費，24 小時）</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-red-200 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-red-600">財布を盗まれました</p>
+                                <p class="text-xs text-gray-400 mt-0.5">我的錢包被偷了</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-red-100">
+                            <div class="bg-red-50 rounded-xl p-3 border border-red-100">
+                                <p class="text-xs font-bold text-red-700">先撥打警察 110，再聯絡台灣在日辦事處：+81-3-3280-7811</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">近くの薬局はどこですか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">附近的藥局在哪裡？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">輕微不舒服時，可先前往藥局（ドラッグストア）購買非處方藥</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-8 bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center">
-                    <i class="fa-solid fa-language text-blue-500 mr-2 text-lg"></i> 中文對照翻譯
-                </h3>
-                <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg leading-relaxed">
-                    我們無法食用<span class="font-bold text-red-500">牛肉、馬肉、羊肉</span>。豬肉、雞肉、海鮮及蔬菜皆可食用，感謝您的協助。
-                </p>
-            </div>
-
-            <!-- 避開關鍵字 -->
-            <div class="mt-5 bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-                <h3 class="text-sm font-bold text-gray-800 mb-3 border-b border-gray-100 pb-2">
-                    <span class="text-red-500 mr-1">❌</span> 自助點餐避雷字眼
-                </h3>
-                <div class="grid grid-cols-2 gap-3 mt-3">
-                    <div class="bg-red-50 text-red-800 text-sm font-bold p-3 rounded-xl text-center border shadow-sm border-red-100">🐮 牛肉 (Gyuniku)</div>
-                    <div class="bg-red-50 text-red-800 text-sm font-bold p-3 rounded-xl text-center border shadow-sm border-red-100">🍔 ビーフ (Beef)</div>
-                    <div class="bg-red-50 text-red-800 text-sm font-bold p-3 rounded-xl text-center border shadow-sm border-red-100">🐴 馬刺し (Basashi)</div>
-                    <div class="bg-red-50 text-red-800 text-sm font-bold p-3 rounded-xl text-center border shadow-sm border-red-100">🐑 マトン (Mutton)</div>
-                </div>
-            </div>
-            
             <div class="h-10"></div>
         </section>
 
@@ -870,8 +1376,8 @@
                 <!-- SOS Badge -->
                 <div class="absolute -top-1 -right-2 w-2 h-2 rounded-full bg-red-500 animate-ping"></div>
                 <div class="absolute -top-1 -right-2 w-2 h-2 rounded-full bg-red-500"></div>
-                <i class="fa-solid fa-heart-pulse text-xl mb-1 block"></i>
-                <span class="text-[10px] font-bold tracking-wide">飲食SOS</span>
+                <i class="fa-solid fa-language text-xl mb-1 block"></i>
+                <span class="text-[10px] font-bold tracking-wide">翻譯幫助</span>
             </button>
             
             <!-- Expense -->
@@ -894,6 +1400,64 @@
     <!-- Javascript 邏輯區域     -->
     <!-- ======================= -->
     <script>
+        // === 0. 翻譯頁 Tab 切換邏輯 ===
+        function switchTranslateTab(tabId) {
+            // 更新 Tab 按鈕樣式
+            document.querySelectorAll('.translate-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('ttab-' + tabId).classList.add('active');
+
+            // 切換 Panel
+            document.querySelectorAll('.translate-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            document.getElementById('tpanel-' + tabId).classList.add('active');
+        }
+
+        // === 0b. 飲食需求人物卡切換 ===
+        function switchDietCard(person) {
+            // 重置所有人物按鈕樣式
+            document.querySelectorAll('.diet-person-btn').forEach(btn => {
+                btn.className = 'diet-person-btn flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-gray-200 bg-white transition-all';
+            });
+
+            // 套用選中樣式（霖&樂用綠色，其他用紅色）
+            const activeBtn = document.getElementById('diet-btn-' + person);
+            if (person === 'linle') {
+                activeBtn.className = 'diet-person-btn active flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-green-400 bg-green-50 transition-all';
+            } else {
+                activeBtn.className = 'diet-person-btn active flex flex-col items-center gap-1 py-3 px-2 rounded-2xl border-2 border-red-400 bg-red-50 transition-all';
+            }
+
+            // 切換顯示的翻譯卡
+            document.querySelectorAll('.diet-card').forEach(card => {
+                card.classList.add('hidden');
+            });
+            document.getElementById('diet-card-' + person).classList.remove('hidden');
+        }
+
+        // === 0c. 旅遊對話分類切換 ===
+        function switchPhraseCategory(catId) {
+            document.querySelectorAll('.phrase-cat-btn').forEach(btn => {
+                btn.className = 'phrase-cat-btn flex-none py-1.5 px-3 rounded-xl text-xs font-bold bg-white text-gray-500 border border-gray-200 shadow-sm transition-all';
+            });
+            document.getElementById('pcat-' + catId).className = 'phrase-cat-btn flex-none py-1.5 px-3 rounded-xl text-xs font-bold bg-gray-800 text-white shadow transition-all';
+
+            document.querySelectorAll('.phrase-category').forEach(el => el.classList.add('hidden'));
+            document.getElementById('phrases-' + catId).classList.remove('hidden');
+        }
+
+        // === 0c. 展開/收合對話卡片 ===
+        function togglePhrase(card) {
+            const isExpanded = card.classList.contains('expanded');
+            // 收合所有
+            document.querySelectorAll('.phrase-card.expanded').forEach(c => c.classList.remove('expanded'));
+            // 若本來是收合的，則展開
+            if (!isExpanded) {
+                card.classList.add('expanded');
+            }
+        }
         // === 1. Tab 切換邏輯 ===
         const sectionTitles = {
             'home': '', // 首頁不顯示頂部標題
