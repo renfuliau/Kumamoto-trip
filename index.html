@@ -270,7 +270,23 @@
                     <ul class="space-y-4 relative">
                         <!-- 連接線 -->
                         <div class="absolute left-[11px] top-2 bottom-2 w-0.5 bg-gray-100"></div>
-                        
+
+                        <li class="relative pl-6">
+                            <div class="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-white border-4 border-pink-100 flex items-center justify-center -ml-px">
+                                <div class="w-2 h-2 rounded-full bg-pink-400"></div>
+                            </div>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-xs font-bold text-pink-500 bg-pink-50 px-2 py-0.5 rounded">5/5 (霖&thinsp;&amp;&thinsp;樂)</span>
+                                    <p class="font-bold mt-1">KOKO HOTEL Premier Kumamoto</p>
+                                    <p class="text-xs text-gray-500">熊本市區 (1晚，先行抵達)</p>
+                                </div>
+                                <a href="https://www.google.com/maps/search/?api=1&query=KOKO+HOTEL+Premier+Kumamoto" target="_blank" class="flex-shrink-0 ml-2 mt-1 inline-flex items-center justify-center text-pink-500 bg-pink-50 hover:bg-pink-100 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors shadow-sm border border-pink-200">
+                                    <i class="fa-solid fa-location-dot mr-1"></i>導航
+                                </a>
+                            </div>
+                        </li>
+
                         <li class="relative pl-6">
                             <div class="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-white border-4 border-indigo-100 flex items-center justify-center -ml-px">
                                 <div class="w-2 h-2 rounded-full bg-indigo-500"></div>
@@ -281,9 +297,12 @@
                                     <p class="font-bold mt-1">FAV HOTEL KUMAMOTO</p>
                                     <p class="text-xs text-gray-500">熊本市區 (連住3晚)</p>
                                 </div>
+                                <a href="https://www.google.com/maps/search/?api=1&query=FAV+HOTEL+KUMAMOTO" target="_blank" class="flex-shrink-0 ml-2 mt-1 inline-flex items-center justify-center text-indigo-500 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors shadow-sm border border-indigo-200">
+                                    <i class="fa-solid fa-location-dot mr-1"></i>導航
+                                </a>
                             </div>
                         </li>
-                        
+
                         <li class="relative pl-6">
                             <div class="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-white border-4 border-teal-100 flex items-center justify-center -ml-px">
                                 <div class="w-2 h-2 rounded-full bg-teal-500"></div>
@@ -294,6 +313,9 @@
                                     <p class="font-bold mt-1">APARTMENT HOTEL YAEZAKI</p>
                                     <p class="text-xs text-gray-500">別府 (1晚)</p>
                                 </div>
+                                <a href="https://www.google.com/maps/search/?api=1&query=APARTMENT+HOTEL+YAEZAKI+Beppu" target="_blank" class="flex-shrink-0 ml-2 mt-1 inline-flex items-center justify-center text-teal-600 bg-teal-50 hover:bg-teal-100 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors shadow-sm border border-teal-200">
+                                    <i class="fa-solid fa-location-dot mr-1"></i>導航
+                                </a>
                             </div>
                         </li>
 
@@ -307,6 +329,9 @@
                                     <p class="font-bold mt-1">熊本新市街光芒飯店</p>
                                     <p class="text-xs text-gray-500">熊本市區 (連住2晚)</p>
                                 </div>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Candeo+Hotels+Kumamoto+Shimotor" target="_blank" class="flex-shrink-0 ml-2 mt-1 inline-flex items-center justify-center text-purple-500 bg-purple-50 hover:bg-purple-100 px-2.5 py-1 rounded-full text-[11px] font-bold transition-colors shadow-sm border border-purple-200">
+                                    <i class="fa-solid fa-location-dot mr-1"></i>導航
+                                </a>
                             </div>
                         </li>
                     </ul>
@@ -321,6 +346,7 @@
             
             <!-- 天數切換器 (橫向滾動) -->
             <div class="flex space-x-3 overflow-x-auto pb-4 pt-1 hide-scrollbar -mx-5 px-5 sticky top-12 z-30 bg-light/95 backdrop-blur">
+                <button onclick="showDay(0, this)" class="day-btn flex-none px-4 py-2.5 bg-white border border-pink-300 text-pink-500 rounded-xl shadow-sm text-sm font-bold transition-all">先行<span class="text-[10px] font-normal block opacity-80 mt-0.5">5/5 霖樂</span></button>
                 <button onclick="showDay(1, this)" class="day-btn flex-none px-4 py-2.5 bg-primary text-white rounded-xl shadow-md text-sm font-bold transition-all">D1<span class="text-[10px] font-normal block opacity-80 mt-0.5">5/6</span></button>
                 <button onclick="showDay(2, this)" class="day-btn flex-none px-4 py-2.5 bg-white text-gray-500 rounded-xl shadow-sm border border-gray-100 text-sm font-bold transition-all">D2<span class="text-[10px] font-normal block opacity-80 mt-0.5">5/7</span></button>
                 <button onclick="showDay(3, this)" class="day-btn flex-none px-4 py-2.5 bg-white text-gray-500 rounded-xl shadow-sm border border-gray-100 text-sm font-bold transition-all">D3<span class="text-[10px] font-normal block opacity-80 mt-0.5">5/8</span></button>
@@ -330,6 +356,67 @@
                 <button onclick="showDay(7, this)" class="day-btn flex-none px-4 py-2.5 bg-white text-gray-500 rounded-xl shadow-sm border border-gray-100 text-sm font-bold transition-all">D7<span class="text-[10px] font-normal block opacity-80 mt-0.5">5/12</span></button>
             </div>
 
+            <!-- Day 0 Content (5/5 - 霖 & 樂 先行抵達) -->
+            <div id="day-0" class="day-content mt-4 hidden">
+                <div class="mb-4 flex items-center">
+                    <div class="bg-pink-100 text-pink-500 p-2.5 rounded-xl mr-3 shadow-sm">
+                        <i class="fa-solid fa-plane-arrival text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-dark">霖 &amp; 樂 先行抵達・初夜探索</h2>
+                        <p class="text-xs text-pink-500 font-bold">比大家提早一天踏上九州的土地！</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 mb-5">
+                    <div class="bg-pink-50 p-3 rounded-2xl shadow-sm border border-pink-100 flex flex-col justify-center">
+                        <span class="text-[10px] text-pink-400 mb-0.5"><i class="fa-solid fa-bed mr-1"></i>住宿</span>
+                        <span class="text-xs font-bold text-pink-700 leading-tight">KOKO HOTEL<br><span class="text-[10px] font-normal text-pink-500">Premier Kumamoto</span></span>
+                    </div>
+                    <div class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-center">
+                        <span class="text-[10px] text-gray-400 mb-0.5"><i class="fa-solid fa-user-group mr-1"></i>成員</span>
+                        <span class="text-xs font-bold text-gray-700 leading-tight">霖 &amp; 樂<br><span class="text-[10px] font-normal text-gray-500">Jan &amp; Ziv 明日到</span></span>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 mb-5 flex items-start gap-2.5">
+                    <i class="fa-solid fa-circle-info text-amber-500 mt-0.5 flex-shrink-0"></i>
+                    <p class="text-xs text-amber-800 leading-relaxed">Jan &amp; Ziv 明天（5/6）18:15 抵達熊本機場，D1 大家在 FAV HOTEL 一起 Check-in，記得確認集合計畫。</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="timeline-container">
+                        <div class="timeline-item highlight">
+                            <p class="text-xs font-bold text-primary tracking-widest mb-1">18:15</p>
+                            <h4 class="font-bold text-dark text-sm">抵達熊本機場 (KMJ)</h4>
+                            <p class="text-xs text-gray-500 mt-1">JX846 班機降落，辦理入境手續。</p>
+                        </div>
+                        <div class="timeline-item">
+                            <p class="text-xs font-bold text-gray-400 tracking-widest mb-1">19:15</p>
+                            <h4 class="font-bold text-dark text-sm">搭乘機場利木津巴士往市區</h4>
+                            <p class="text-xs text-gray-500 mt-1">約 50–60 分鐘，票價 1,000円，抵達熊本交通中心。</p>
+                        </div>
+                        <div class="timeline-item highlight">
+                            <p class="text-xs font-bold text-primary tracking-widest mb-1">20:15</p>
+                            <h4 class="font-bold text-dark text-sm">入住 KOKO HOTEL Premier Kumamoto</h4>
+                            <p class="text-xs text-gray-500 mt-1">辦理 Check-in，放下行李稍作休息。</p>
+                        </div>
+                        <div class="timeline-item highlight">
+                            <p class="text-xs font-bold text-primary tracking-widest mb-1">20:30</p>
+                            <h4 class="font-bold text-dark text-sm">晚餐：黑亭拉麵 (下通店)</h4>
+                            <div class="bg-orange-50 p-2 rounded-lg mt-2 border border-orange-100">
+                                <p class="text-xs text-orange-800 font-medium">熊本必吃！焦香黑蒜油豚骨拉麵，先替大家嚐鮮。</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <p class="text-xs font-bold text-gray-400 tracking-widest mb-1">21:30</p>
+                            <h4 class="font-bold text-dark text-sm">下通商店街夜間散步</h4>
+                            <p class="text-xs text-gray-500 mt-1">感受熊本夜晚氛圍，早點休息，明天全員集合！</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Day 1 Content -->
             <div id="day-1" class="day-content mt-4 animate-[fadeIn_0.3s_ease-out]">
                 <div class="mb-4 flex items-center">
@@ -337,8 +424,8 @@
                         <i class="fa-solid fa-moon text-xl"></i>
                     </div>
                     <div>
-                        <h2 class="text-lg font-bold text-dark">抵達熊本・深夜食堂</h2>
-                        <p class="text-xs text-gray-500">踏入火之國，開啟美食之旅</p>
+                        <h2 class="text-lg font-bold text-dark">血拼日・全員集合與馬肉刺身</h2>
+                        <p class="text-xs text-gray-500">霖與樂的購物時光，夜晚迎來大團圓</p>
                     </div>
                 </div>
                 
@@ -355,9 +442,26 @@
 
                 <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
                     <div class="timeline-container">
+                        <div class="timeline-item">
+                            <p class="text-xs font-bold text-gray-400 tracking-widest mb-1">10:30</p>
+                            <h4 class="font-bold text-dark text-sm">市區逛街購物 <span class="text-xs text-pink-500 font-bold bg-pink-50 px-1.5 py-0.5 rounded ml-1">霖&nbsp;&amp;&nbsp;樂</span></h4>
+                            <p class="text-xs text-gray-500 mt-1">SAKURA MACHI 櫻町熊本、鶴屋百貨，開啟第一波血拼！</p>
+                        </div>
+                        <div class="timeline-item highlight">
+                            <p class="text-xs font-bold text-primary tracking-widest mb-1">12:30</p>
+                            <h4 class="font-bold text-dark text-sm">午餐：敘敘院 SAKURA MACHI 熊本店 <span class="text-xs text-pink-500 font-bold bg-pink-50 px-1.5 py-0.5 rounded ml-1">霖&nbsp;&amp;&nbsp;樂</span></h4>
+                            <div class="bg-red-50 p-2 rounded-lg mt-2 border border-red-100">
+                                <p class="text-xs text-red-800 font-medium">享受頂級燒肉午間套餐，高 CP 值的奢華午餐！</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <p class="text-xs font-bold text-gray-400 tracking-widest mb-1">15:00</p>
+                            <h4 class="font-bold text-dark text-sm">上/下通商店街繼續血拼 <span class="text-xs text-pink-500 font-bold bg-pink-50 px-1.5 py-0.5 rounded ml-1">霖&nbsp;&amp;&nbsp;樂</span></h4>
+                            <p class="text-xs text-gray-500 mt-1">藥妝、服飾、雜貨一網打盡，買完可以直接拿回飯店放。</p>
+                        </div>
                         <div class="timeline-item highlight">
                             <p class="text-xs font-bold text-primary tracking-widest mb-1">18:15</p>
-                            <h4 class="font-bold text-dark text-sm">抵達熊本機場 (KMJ)</h4>
+                            <h4 class="font-bold text-dark text-sm">抵達熊本機場 (KMJ) <span class="text-xs text-teal-600 font-bold bg-teal-50 px-1.5 py-0.5 rounded ml-1">Jan&nbsp;&amp;&nbsp;Ziv</span></h4>
                             <p class="text-xs text-gray-500 mt-1">辦理入境手續。</p>
                         </div>
                         <div class="timeline-item">
@@ -371,9 +475,9 @@
                         </div>
                         <div class="timeline-item highlight">
                             <p class="text-xs font-bold text-primary tracking-widest mb-1">21:00</p>
-                            <h4 class="font-bold text-dark text-sm">晚餐：黑亭拉麵 (下通店)</h4>
+                            <h4 class="font-bold text-dark text-sm">晚餐：當地人氣居酒屋 (如：菅乃屋) <span class="text-xs text-indigo-500 font-bold bg-indigo-50 px-1.5 py-0.5 rounded ml-1">全員集合</span></h4>
                             <div class="bg-orange-50 p-2 rounded-lg mt-2 border border-orange-100">
-                                <p class="text-xs text-orange-800 font-medium">特色：焦香黑蒜油豚骨拉麵，純豬骨熬製，無牛馬羊。</p>
+                                <p class="text-xs text-orange-800 font-medium">慶祝全員到齊！必點熊本名物「馬肉刺身」(櫻肉) 及在地特色料理。</p>
                             </div>
                         </div>
                     </div>
@@ -1515,6 +1619,8 @@
             document.querySelectorAll('.day-btn').forEach(btn => {
                 if(btn.innerText.includes('🚗')) {
                     btn.className = "day-btn flex-none px-4 py-2.5 bg-white border border-red-200 text-red-500 rounded-xl shadow-sm text-sm font-bold transition-all";
+                } else if(btn.innerText.includes('先行')) {
+                    btn.className = "day-btn flex-none px-4 py-2.5 bg-white border border-pink-300 text-pink-500 rounded-xl shadow-sm text-sm font-bold transition-all";
                 } else {
                     btn.className = "day-btn flex-none px-4 py-2.5 bg-white text-gray-500 rounded-xl shadow-sm border border-gray-100 text-sm font-bold transition-all";
                 }
