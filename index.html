@@ -1225,10 +1225,25 @@
                     </div>
                     
                     <div class="p-6">
+                        <div class="flex gap-2 justify-center mb-5">
+                            <button onclick="changeFuelType('レギュラー満タン', '一般汽油', 'red', 'Regular', this)" class="fuel-type-btn flex-1 py-2 px-1 rounded-xl border-2 border-red-500 bg-red-50 text-red-700 text-xs font-bold transition-all shadow-sm">
+                                <span class="block text-lg mb-0.5">🔴</span>
+                                レギュラー<br>(一般)
+                            </button>
+                            <button onclick="changeFuelType('ハイオク満タン', '高級汽油', 'yellow', 'High Octane', this)" class="fuel-type-btn flex-1 py-2 px-1 rounded-xl border border-gray-200 bg-white text-gray-500 text-xs font-bold transition-all hover:bg-gray-50">
+                                <span class="block text-lg mb-0.5">🟡</span>
+                                ハイオク<br>(高級)
+                            </button>
+                            <button onclick="changeFuelType('軽油満タン', '柴油', 'green', 'Diesel', this)" class="fuel-type-btn flex-1 py-2 px-1 rounded-xl border border-gray-200 bg-white text-gray-500 text-xs font-bold transition-all hover:bg-gray-50">
+                                <span class="block text-lg mb-0.5">🟢</span>
+                                軽油<br>(柴油)
+                            </button>
+                        </div>
+
                         <div class="text-center space-y-4">
                             <p class="text-xl font-bold text-dark leading-relaxed">すみません、</p>
                             <div class="bg-blue-50 py-3 rounded-xl border border-blue-100 transform -rotate-1 my-4">
-                                <p class="text-3xl font-black text-blue-600 underline decoration-blue-300 decoration-4 underline-offset-4">
+                                <p id="fuel-type-text" class="text-3xl font-black text-blue-600 underline decoration-blue-300 decoration-4 underline-offset-4">
                                     レギュラー満タン
                                 </p>
                             </div>
@@ -1238,7 +1253,7 @@
                         <div class="my-6 border-b border-dashed border-gray-300"></div>
                         
                         <div class="flex items-center justify-center bg-gray-50 p-4 rounded-xl text-center">
-                            <p class="text-sm font-bold text-gray-700">
+                            <p id="fuel-desc-text" class="text-sm font-bold text-gray-700">
                                 （不好意思，請幫我加滿一般汽油）<br>
                                 <span class="text-xs text-red-500 mt-1 block"><i class="fa-solid fa-droplet mr-1"></i> 請認明紅色油槍 (Regular)</span>
                             </p>
@@ -2755,14 +2770,13 @@
             });
 
             // 2. 處理加油翻譯
-            const fuelTextEl = document.querySelector('#tpanel-fuel .bg-blue-50 p');
+            const fuelTextEl = document.getElementById('fuel-type-text');
             if (fuelTextEl && !fuelTextEl.hasAttribute('data-has-speaker')) {
                 fuelTextEl.setAttribute('data-has-speaker', 'true');
-                const text = "すみません、レギュラー満タンでお願いします。";
                 const btn = document.createElement('button');
                 btn.className = 'mt-1 text-blue-500 bg-white hover:bg-blue-50 px-4 py-2 rounded-full inline-flex items-center justify-center transition shadow-sm border border-blue-200 text-sm font-bold';
                 btn.innerHTML = '<i class="fa-solid fa-volume-high mr-2"></i>語音朗讀';
-                btn.onclick = (e) => speakJapanese(text, e);
+                btn.onclick = (e) => speakJapanese(`すみません、${fuelTextEl.innerText.trim()}でお願いします。`, e);
                 fuelTextEl.parentNode.parentNode.appendChild(btn);
             }
 
@@ -2851,6 +2865,41 @@
             const inputEl = document.getElementById('route-dest-input');
             if (inputEl && inputEl.value !== val) {
                 inputEl.value = val;
+            }
+        }
+
+        // === 13. 加油種類選擇邏輯 ===
+        function changeFuelType(jpText, zhText, color, engName, btn) {
+            // 變更按鈕樣式
+            const buttons = btn.parentElement.querySelectorAll('.fuel-type-btn');
+            buttons.forEach(b => {
+                b.className = 'fuel-type-btn flex-1 py-2 px-1 rounded-xl border border-gray-200 bg-white text-gray-500 text-xs font-bold transition-all hover:bg-gray-50';
+            });
+            
+            // 設定新的選取樣式
+            let colorClasses = '';
+            let textColor = '';
+            if (color === 'red') {
+                colorClasses = 'border-red-500 bg-red-50 text-red-700 shadow-sm';
+                textColor = 'text-red-500';
+            } else if (color === 'yellow') {
+                colorClasses = 'border-amber-500 bg-amber-50 text-amber-700 shadow-sm';
+                textColor = 'text-amber-500';
+            } else if (color === 'green') {
+                colorClasses = 'border-green-500 bg-green-50 text-green-700 shadow-sm';
+                textColor = 'text-green-500';
+            }
+            btn.className = `fuel-type-btn flex-1 py-2 px-1 rounded-xl border-2 ${colorClasses} text-xs font-bold transition-all`;
+
+            // 更新日文
+            const fuelTextEl = document.getElementById('fuel-type-text');
+            if (fuelTextEl) fuelTextEl.innerText = jpText;
+
+            // 更新中文說明
+            const descEl = document.getElementById('fuel-desc-text');
+            if (descEl) {
+                descEl.innerHTML = `（不好意思，請幫我加滿${zhText}）<br>
+                                <span class="text-xs ${textColor} mt-1 block"><i class="fa-solid fa-droplet mr-1"></i> 請認明對應油槍 (${engName})</span>`;
             }
         }
 
