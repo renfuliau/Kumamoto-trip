@@ -1296,16 +1296,19 @@
                     <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
-                                <p class="text-base font-black text-dark">〇〇はどこですか？</p>
-                                <p class="text-xs text-gray-400 mt-0.5">OO 在哪裡？</p>
+                                <p class="text-base font-black text-dark"><span id="route-dest-text">〇〇</span>はどこですか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5"><span id="route-dest-text-zh">OO</span> 在哪裡？</p>
                             </div>
                             <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
                         </div>
                         <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
-                            <p class="text-xs text-gray-500 mb-2">💡 使用方式：將目的地名稱替換 〇〇，直接出示給路人看</p>
+                            <p class="text-xs text-gray-500 mb-2">💡 請輸入您想去的目的地（地名或店舖）：</p>
+                            <div class="flex items-center gap-2 mb-2" onclick="(function(e){e.stopPropagation()})(event)">
+                                <input type="text" id="route-dest-input" placeholder="例如：熊本城、トイレ" class="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 transition-all" oninput="updateRouteDest(this.value)">
+                                <button onclick="updateRouteDest('')" class="text-gray-400 hover:text-gray-600 px-2 py-2"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
                             <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
-                                <p class="font-bold text-blue-800 text-base">熊本城はどこですか？</p>
-                                <p class="text-xs text-blue-600 mt-1">熊本城在哪裡？</p>
+                                <p class="text-xs text-blue-600 font-bold">輸入後點擊上方的喇叭，系統會直接幫您唸出來喔！</p>
                             </div>
                         </div>
                     </div>
@@ -1357,6 +1360,49 @@
 
                 <!-- 購物 -->
                 <div id="phrases-shop" class="phrase-category space-y-3 hidden">
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">この <span id="shop-size-text">M</span> サイズはありますか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">請問還有這個尺寸的嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500 mb-2">💡 請選擇您需要的尺寸：</p>
+                            <div class="flex gap-2 mb-1" onclick="(function(e){e.stopPropagation()})(event)">
+                                <button onclick="changeShopSize('S', this, event)" class="shop-size-btn flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition-all">S</button>
+                                <button onclick="changeShopSize('M', this, event)" class="shop-size-btn flex-1 py-1.5 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-600 text-xs font-bold transition-all">M</button>
+                                <button onclick="changeShopSize('L', this, event)" class="shop-size-btn flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition-all">L</button>
+                                <button onclick="changeShopSize('XL', this, event)" class="shop-size-btn flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition-all">XL</button>
+                                <button onclick="changeShopSize('2XL', this, event)" class="shop-size-btn flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition-all">2XL</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">新しい在庫はありますか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">請問還有新的存貨嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">指著架上的展示品，詢問是否還有拿全新的</p>
+                        </div>
+                    </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">試着してもいいですか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">請問可以試穿嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500">拿著衣服向店員詢問，通常他們會引導您到試衣間（フィッティングルーム）</p>
+                        </div>
+                    </div>
                     <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
@@ -1415,6 +1461,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <p class="text-base font-black text-dark">この服のコーディネートを教えてもらえませんか？</p>
+                                <p class="text-xs text-gray-400 mt-0.5">可以請您幫我介紹這件衣服怎麼搭配嗎？</p>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
+                        </div>
+                        <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
+                            <p class="text-xs text-gray-500 mb-2">💡 拿著想買的單品向店員請教穿搭建議</p>
+                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
+                                <p class="font-bold text-blue-800 text-sm">すみません、この服のコーディネートを教えてもらえませんか？</p>
+                                <p class="text-xs text-blue-600 mt-1">不好意思，可以請您幫我介紹這件衣服怎麼搭配嗎？</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 美食 -->
@@ -1422,15 +1484,16 @@
                     <div class="phrase-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm" onclick="togglePhrase(this)">
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
-                                <p class="text-base font-black text-dark">〇名です、予約しています</p>
-                                <p class="text-xs text-gray-400 mt-0.5">我有訂位，〇人</p>
+                                <p class="text-base font-black text-dark"><span id="food-party-text">4</span>名です、予約しています</p>
+                                <p class="text-xs text-gray-400 mt-0.5">我有訂位，<span id="food-party-text-zh">4</span>人</p>
                             </div>
                             <i class="fa-solid fa-chevron-down text-gray-300 transition-transform"></i>
                         </div>
                         <div class="phrase-detail mt-3 pt-3 border-t border-blue-100">
-                            <div class="bg-blue-50 rounded-xl p-3 border border-blue-100">
-                                <p class="font-bold text-blue-800 text-sm">4名です、予約しています。</p>
-                                <p class="text-xs text-blue-600 mt-1">我們有訂位，共 4 位。（將數字替換為實際人數）</p>
+                            <p class="text-xs text-gray-500 mb-2">💡 請問您的訂位人數是幾位？</p>
+                            <div class="flex gap-2" onclick="(function(e){e.stopPropagation()})(event)">
+                                <button onclick="changePartySize('2', this, event)" class="party-size-btn flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition-all">2位</button>
+                                <button onclick="changePartySize('4', this, event)" class="party-size-btn flex-1 py-1.5 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-600 text-xs font-bold transition-all">4位</button>
                             </div>
                         </div>
                     </div>
@@ -2656,6 +2719,141 @@
             }
         }
 
+        // === 9. 語音朗讀邏輯 (Web Speech API) ===
+        function speakJapanese(text, event) {
+            if (event) event.stopPropagation();
+            if (!window.speechSynthesis) {
+                alert('您的瀏覽器不支援語音朗讀功能');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ja-JP';
+            utterance.rate = 0.85; // 稍微放慢速度
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function initSpeakerIcons() {
+            // 1. 處理 Phrase Cards
+            document.querySelectorAll('.phrase-card').forEach(card => {
+                const jpTextEl = card.querySelector('p.font-black');
+                if (jpTextEl && !jpTextEl.hasAttribute('data-has-speaker')) {
+                    jpTextEl.setAttribute('data-has-speaker', 'true');
+                    
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'flex items-center gap-2';
+                    jpTextEl.parentNode.insertBefore(wrapper, jpTextEl);
+                    wrapper.appendChild(jpTextEl);
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'text-blue-500 bg-blue-50 hover:bg-blue-100 w-7 h-7 rounded-full flex items-center justify-center transition shadow-sm flex-shrink-0';
+                    btn.innerHTML = '<i class="fa-solid fa-volume-high text-xs"></i>';
+                    // 改用動態讀取 innerText，確保修改尺寸等文字變更時朗讀內容也會變
+                    btn.onclick = (e) => speakJapanese(jpTextEl.innerText.trim(), e);
+                    wrapper.appendChild(btn);
+                }
+            });
+
+            // 2. 處理加油翻譯
+            const fuelTextEl = document.querySelector('#tpanel-fuel .bg-blue-50 p');
+            if (fuelTextEl && !fuelTextEl.hasAttribute('data-has-speaker')) {
+                fuelTextEl.setAttribute('data-has-speaker', 'true');
+                const text = "すみません、レギュラー満タンでお願いします。";
+                const btn = document.createElement('button');
+                btn.className = 'mt-1 text-blue-500 bg-white hover:bg-blue-50 px-4 py-2 rounded-full inline-flex items-center justify-center transition shadow-sm border border-blue-200 text-sm font-bold';
+                btn.innerHTML = '<i class="fa-solid fa-volume-high mr-2"></i>語音朗讀';
+                btn.onclick = (e) => speakJapanese(text, e);
+                fuelTextEl.parentNode.parentNode.appendChild(btn);
+            }
+
+            // 3. 處理飲食需求
+            const zivDietEl = document.querySelector('#diet-card-ziv .bg-red-50 p');
+            if (zivDietEl && !zivDietEl.hasAttribute('data-has-speaker')) {
+                zivDietEl.setAttribute('data-has-speaker', 'true');
+                const text = "私は、牛肉・馬肉を食べることができません。";
+                const btn = document.createElement('button');
+                btn.className = 'mt-1 text-red-500 bg-white hover:bg-red-50 px-4 py-2 rounded-full inline-flex items-center justify-center transition shadow-sm border border-red-200 text-sm font-bold';
+                btn.innerHTML = '<i class="fa-solid fa-volume-high mr-2"></i>語音朗讀';
+                btn.onclick = (e) => speakJapanese(text, e);
+                zivDietEl.parentNode.parentNode.appendChild(btn);
+            }
+            
+            const janDietEl = document.querySelector('#diet-card-jan .bg-red-50 p');
+            if (janDietEl && !janDietEl.hasAttribute('data-has-speaker')) {
+                janDietEl.setAttribute('data-has-speaker', 'true');
+                const text = "私は、牛肉・馬肉・羊肉を食べることができません。";
+                const btn = document.createElement('button');
+                btn.className = 'mt-1 text-red-500 bg-white hover:bg-red-50 px-4 py-2 rounded-full inline-flex items-center justify-center transition shadow-sm border border-red-200 text-sm font-bold';
+                btn.innerHTML = '<i class="fa-solid fa-volume-high mr-2"></i>語音朗讀';
+                btn.onclick = (e) => speakJapanese(text, e);
+                janDietEl.parentNode.parentNode.appendChild(btn);
+            }
+
+            const linleDietEl = document.querySelector('#diet-card-linle p.text-green-700');
+            if (linleDietEl && !linleDietEl.hasAttribute('data-has-speaker')) {
+                linleDietEl.setAttribute('data-has-speaker', 'true');
+                const text = "何でも食べられます！";
+                const btn = document.createElement('button');
+                btn.className = 'ml-2 text-green-600 bg-green-100 hover:bg-green-200 w-6 h-6 rounded-full inline-flex items-center justify-center transition shadow-sm align-middle';
+                btn.innerHTML = '<i class="fa-solid fa-volume-high text-xs"></i>';
+                btn.onclick = (e) => speakJapanese(text, e);
+                linleDietEl.appendChild(btn);
+            }
+        }
+
+        // === 10. 購物尺寸選擇邏輯 ===
+        function changeShopSize(size, btn, event) {
+            if(event) event.stopPropagation();
+            
+            // 變更按鈕樣式
+            const buttons = btn.parentElement.querySelectorAll('.shop-size-btn');
+            buttons.forEach(b => {
+                b.className = 'shop-size-btn flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition-all';
+            });
+            btn.className = 'shop-size-btn flex-1 py-1.5 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-600 text-xs font-bold transition-all';
+            
+            // 更新卡片上的日文及中文標題
+            const textEl = btn.closest('.phrase-card').querySelector('#shop-size-text');
+            if (textEl) {
+                textEl.innerText = size;
+            }
+        }
+
+        // === 11. 餐廳訂位人數選擇邏輯 ===
+        function changePartySize(size, btn, event) {
+            if(event) event.stopPropagation();
+            
+            // 變更按鈕樣式
+            const buttons = btn.parentElement.querySelectorAll('.party-size-btn');
+            buttons.forEach(b => {
+                b.className = 'party-size-btn flex-1 py-1.5 rounded-lg border border-gray-200 text-xs font-bold text-gray-500 transition-all';
+            });
+            btn.className = 'party-size-btn flex-1 py-1.5 rounded-lg border-2 border-blue-500 bg-blue-50 text-blue-600 text-xs font-bold transition-all';
+            
+            // 更新卡片上的文字
+            const card = btn.closest('.phrase-card');
+            const jpTextEl = card.querySelector('#food-party-text');
+            const zhTextEl = card.querySelector('#food-party-text-zh');
+            if (jpTextEl) jpTextEl.innerText = size;
+            if (zhTextEl) zhTextEl.innerText = size;
+        }
+
+        // === 12. 問路目的地更新邏輯 ===
+        function updateRouteDest(val) {
+            const dest = val.trim() || '〇〇';
+            const destZh = val.trim() || 'OO';
+            const jpTextEl = document.getElementById('route-dest-text');
+            const zhTextEl = document.getElementById('route-dest-text-zh');
+            if (jpTextEl) jpTextEl.innerText = dest;
+            if (zhTextEl) zhTextEl.innerText = destZh;
+            
+            // 同步清空按鈕點擊時的 input value
+            const inputEl = document.getElementById('route-dest-input');
+            if (inputEl && inputEl.value !== val) {
+                inputEl.value = val;
+            }
+        }
+
         // === 初始化運行 ===
         window.onload = () => {
             switchTab('home');
@@ -2663,6 +2861,7 @@
             renderChecklist();
             initNavigation();
             initWeather();
+            initSpeakerIcons();
         };
 
     </script>
