@@ -2028,7 +2028,8 @@
 
         // === 4. 倒數計時邏輯 ===
         function initCountdown() {
-            const targetDate = new Date('2026/05/06 18:15:00').getTime();
+            // 指定為日本時區，避免不同時區的裝置倒數結果不同
+            const targetDate = new Date('2026-05-06T18:15:00+09:00').getTime();
             const countdownEl = document.getElementById('countdown');
 
             const timer = setInterval(() => {
@@ -2272,17 +2273,18 @@
 
                     // 判斷目標日期是否為「今天」
                     const now = new Date();
-                    // 用日本時區 (UTC+9) 計算今天日期，避免跨日邊界錯誤
+                    // 用日本時區 (UTC+9) 計算今天日期與時間，避免跨日邊界錯誤
                     const jstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-                    const todayStr = jstNow.toISOString().slice(0, 10);
+                    const jstIsoStr = jstNow.toISOString();
+                    const todayStr = jstIsoStr.slice(0, 10);
                     const isToday = (targetDate === todayStr);
-                    const currentHour = now.getHours();
+                    const currentHour = parseInt(jstIsoStr.slice(11, 13)); // 取得正確的日本時間小時
 
                     // 顯示時段：若為今天，從當前小時開始取 8 小時；其餘取 7、9、11、13、15、17、19、21 共 8 個時間點
                     let displayHours;
                     if (isToday) {
                         displayHours = [];
-                        for (let h = currentHour; h < Math.min(currentHour + 8, 24); h++) {
+                        for (let h = currentHour; h < currentHour + 8; h++) {
                             displayHours.push(h);
                         }
                     } else {
@@ -2302,7 +2304,11 @@
                         const code = data.weathercode[idx];
                         const codeInfo = weatherCodes[code] || { desc: '未知', icon: 'fa-cloud', color: 'text-gray-400' };
                         const isCurrentHour = isToday && h === currentHour;
-                        const timeStr = isCurrentHour ? '現在' : `${h}:00`;
+                        
+                        // 處理跨夜的時間顯示 (例如 h=24 就是 0:00)
+                        const displayH = h % 24;
+                        const timeStr = isCurrentHour ? '現在' : `${displayH}:00`;
+                        
                         const bgClass = isCurrentHour ? 'bg-blue-500 text-white border-blue-600' : 'bg-white text-dark border-gray-100';
                         const iconColor = isCurrentHour ? 'text-white' : codeInfo.color;
                         const tempColor = isCurrentHour ? 'text-white' : 'text-gray-800';
