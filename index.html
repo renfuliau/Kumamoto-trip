@@ -1648,7 +1648,104 @@
         <!-- SECTION: 記帳本 (Expense) -->
         <!-- ======================= -->
         <section id="expense" class="section-content pt-16 pb-32 px-5 min-h-screen">
-            <div id="expense-root"></div>
+            <div class="mb-4">
+                <div class="flex gap-2 p-1 bg-gray-100 rounded-xl">
+                    <button onclick="switchExpenseTab('list')" id="exp-tab-list" class="flex-1 py-2 text-sm font-bold bg-white text-dark rounded-lg shadow-sm transition-all">帳目清單</button>
+                    <button onclick="switchExpenseTab('settle')" id="exp-tab-settle" class="flex-1 py-2 text-sm font-bold text-gray-500 rounded-lg transition-all">分帳結算</button>
+                    <button onclick="switchExpenseTab('add')" id="exp-tab-add" class="flex-1 py-2 text-sm font-bold text-gray-500 rounded-lg transition-all"><i class="fa-solid fa-plus mr-1"></i>新增</button>
+                </div>
+            </div>
+
+            <!-- Panel: List -->
+            <div id="exp-panel-list" class="active">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-bold text-gray-800"><i class="fa-solid fa-receipt mr-2 text-blue-500"></i>所有支出</h3>
+                    <button onclick="fetchExpenses()" class="text-xs text-blue-500 hover:bg-blue-50 px-2 py-1 rounded transition"><i class="fa-solid fa-rotate-right mr-1"></i>重整</button>
+                </div>
+                <div id="expense-list-container" class="space-y-3">
+                    <div class="text-center py-8 text-gray-400 text-sm">載入中...</div>
+                </div>
+            </div>
+
+            <!-- Panel: Add -->
+            <div id="exp-panel-add" class="hidden">
+                <div class="bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                    <h3 class="font-bold text-gray-800 mb-4 flex items-center text-lg">
+                        <i class="fa-solid fa-cart-plus mr-2 text-green-500"></i>新增一筆支出
+                    </h3>
+                    <form id="addExpenseForm" onsubmit="handleAddExpense(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">項目名稱 *</label>
+                            <input type="text" id="exp-title" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400 focus:bg-white transition" placeholder="例如：黑亭拉麵">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">金額 (¥) *</label>
+                                <input type="number" id="exp-amount" required min="0" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400 focus:bg-white transition" placeholder="輸入日圓">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">付款人 *</label>
+                                <select id="exp-payer" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400 focus:bg-white transition">
+                                    <!-- 動態生成選項 -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">類別 *</label>
+                                <select id="exp-category" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400 focus:bg-white transition">
+                                    <option value="餐飲">餐飲</option>
+                                    <option value="交通">交通</option>
+                                    <option value="住宿">住宿</option>
+                                    <option value="門票">門票</option>
+                                    <option value="購物">購物</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 mb-1">日期 *</label>
+                                <input type="date" id="exp-date" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400 focus:bg-white transition">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 mb-1">備註</label>
+                            <input type="text" id="exp-note" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-blue-400 focus:bg-white transition" placeholder="選填">
+                        </div>
+                        <button type="submit" id="exp-submit-btn" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-xl shadow-sm transition flex justify-center items-center">
+                            新增支出
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Panel: Settle -->
+            <div id="exp-panel-settle" class="hidden">
+                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-3xl mb-5 shadow-sm">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-indigo-900 flex items-center text-sm">
+                            <i class="fa-solid fa-users-gear mr-2 text-indigo-500"></i>成員設定
+                        </h3>
+                        <button onclick="editMembers()" class="text-xs text-indigo-600 hover:underline border border-indigo-200 bg-white px-2 py-0.5 rounded shadow-sm">修改名單</button>
+                    </div>
+                    <div id="members-display" class="flex flex-wrap gap-1.5">
+                        <!-- 動態顯示 -->
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                    <i class="fa-solid fa-scale-balanced mr-2 text-orange-500"></i>個人淨額
+                </h3>
+                <div id="settlement-balances" class="space-y-2 mb-6">
+                    <!-- 動態顯示 -->
+                </div>
+
+                <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                    <i class="fa-solid fa-money-bill-transfer mr-2 text-green-500"></i>最優化轉帳清單
+                </h3>
+                <div id="settlement-transfers" class="space-y-2">
+                    <!-- 動態顯示 -->
+                </div>
+            </div>
         </section>
 
     </main>
@@ -1796,6 +1893,15 @@
             } else {
                 header.classList.remove('opacity-100');
                 setTimeout(() => header.classList.add('hidden'), 300);
+            }
+            
+            // 記帳本初始化
+            if (tabId === 'expense') {
+                if (typeof expenseList !== 'undefined' && expenseList.length === 0) {
+                    renderMembers();
+                    updatePayerOptions();
+                    fetchExpenses();
+                }
             }
         }
 
@@ -2210,6 +2316,335 @@
 
             } catch (err) {
                 console.error('Failed to fetch weather:', err);
+            }
+        }
+
+        // === 8. 共同記帳邏輯 (Notion API) ===
+        const NOTION_TOKEN = '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';
+        const DATABASE_ID = '34774633bd01801fb771e01ff639a802';
+        const CORS_PROXY = 'https://corsproxy.io/?';
+
+        let expenseList = [];
+        
+        function getMembers() {
+            try {
+                const m = JSON.parse(localStorage.getItem('expense_members'));
+                if (m && m.length > 0) return m;
+            } catch(e) {}
+            return ['霖', '樂', 'Jan', 'Ziv'];
+        }
+
+        function saveMembers(members) {
+            localStorage.setItem('expense_members', JSON.stringify(members));
+            renderMembers();
+            updatePayerOptions();
+            calculateSettlement();
+        }
+
+        function editMembers() {
+            const current = getMembers().join(',');
+            const input = prompt('請輸入參與分帳的成員名單，以半形逗號分隔：', current);
+            if (input !== null && input.trim() !== '') {
+                const newMembers = input.split(',').map(m => m.trim()).filter(m => m);
+                if (newMembers.length > 0) {
+                    saveMembers(newMembers);
+                }
+            }
+        }
+
+        function renderMembers() {
+            const members = getMembers();
+            const container = document.getElementById('members-display');
+            if(container) {
+                container.innerHTML = members.map(m => `<span class="bg-white text-indigo-700 border border-indigo-200 px-2.5 py-1 rounded-full text-xs font-bold shadow-sm">${m}</span>`).join('');
+            }
+        }
+
+        function updatePayerOptions() {
+            const members = getMembers();
+            const select = document.getElementById('exp-payer');
+            if(select) {
+                select.innerHTML = members.map(m => `<option value="${m}">${m}</option>`).join('');
+            }
+        }
+
+        function switchExpenseTab(tabId) {
+            ['list', 'add', 'settle'].forEach(t => {
+                document.getElementById('exp-panel-' + t).classList.add('hidden');
+                const btn = document.getElementById('exp-tab-' + t);
+                btn.className = "flex-1 py-2 text-sm font-bold text-gray-500 rounded-lg transition-all";
+            });
+            document.getElementById('exp-panel-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('exp-tab-' + tabId);
+            activeBtn.className = "flex-1 py-2 text-sm font-bold bg-white text-dark rounded-lg shadow-sm transition-all";
+
+            if (tabId === 'list') fetchExpenses();
+            if (tabId === 'settle') calculateSettlement();
+            if (tabId === 'add') {
+                document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
+                updatePayerOptions();
+            }
+        }
+
+        async function notionRequest(endpoint, method = 'POST', body = null) {
+            const url = CORS_PROXY + encodeURIComponent(`https://api.notion.com/v1/${endpoint}`);
+            const options = {
+                method,
+                headers: {
+                    'Authorization': `Bearer ${NOTION_TOKEN}`,
+                    'Notion-Version': '2022-06-28',
+                    'Content-Type': 'application/json'
+                }
+            };
+            if (body) options.body = JSON.stringify(body);
+            const res = await fetch(url, options);
+            if (!res.ok) throw new Error('Notion API Error: ' + res.status);
+            return res.json();
+        }
+
+        async function fetchExpenses() {
+            const container = document.getElementById('expense-list-container');
+            container.innerHTML = '<div class="text-center py-8 text-blue-500 text-sm"><i class="fa-solid fa-spinner fa-spin mr-2"></i>連線至 Notion 讀取中...</div>';
+            
+            try {
+                const data = await notionRequest(`databases/${DATABASE_ID}/query`, 'POST', {
+                    sorts: [{ property: '日期', direction: 'descending' }, { timestamp: 'created_time', direction: 'descending' }]
+                });
+                
+                expenseList = data.results.map(page => {
+                    const props = page.properties;
+                    return {
+                        id: page.id,
+                        title: props['項目名稱']?.title[0]?.plain_text || '未命名',
+                        amount: props['金額']?.number || 0,
+                        payer: props['付款人']?.select?.name || '未知',
+                        category: props['類別']?.select?.name || '其他',
+                        date: props['日期']?.date?.start || '',
+                        note: props['備註']?.rich_text[0]?.plain_text || ''
+                    };
+                });
+
+                renderExpenses();
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = '<div class="text-center py-8 text-red-500 text-sm">載入失敗，可能是 CORS Proxy 限制，請稍後再重試。</div>';
+            }
+        }
+
+        function getCategoryIcon(cat) {
+            const map = {
+                '餐飲': '<i class="fa-solid fa-utensils text-orange-500"></i>',
+                '交通': '<i class="fa-solid fa-train text-blue-500"></i>',
+                '住宿': '<i class="fa-solid fa-bed text-pink-500"></i>',
+                '門票': '<i class="fa-solid fa-ticket text-amber-500"></i>',
+                '購物': '<i class="fa-solid fa-bag-shopping text-purple-500"></i>'
+            };
+            return map[cat] || '<i class="fa-solid fa-receipt text-green-500"></i>';
+        }
+
+        function renderExpenses() {
+            const container = document.getElementById('expense-list-container');
+            if (expenseList.length === 0) {
+                container.innerHTML = '<div class="text-center py-8 text-gray-400 text-sm">目前沒有任何支出紀錄</div>';
+                return;
+            }
+
+            let total = 0;
+            const html = expenseList.map(exp => {
+                total += exp.amount;
+                return `
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-lg flex-shrink-0 mr-3">
+                                ${getCategoryIcon(exp.category)}
+                            </div>
+                            <div>
+                                <div class="flex items-center mb-0.5">
+                                    <span class="font-bold text-dark text-sm mr-2">${exp.title}</span>
+                                    <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">${exp.date.substring(5)}</span>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    由 <span class="font-bold text-indigo-600">${exp.payer}</span> 支付
+                                    ${exp.note ? `<span class="ml-1 text-gray-400">· ${exp.note}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end flex-shrink-0 ml-2">
+                            <span class="font-black text-red-500 text-base tracking-tight">¥${exp.amount.toLocaleString()}</span>
+                            <button onclick="deleteExpense('${exp.id}')" class="text-[10px] text-gray-300 hover:text-red-500 mt-1.5 transition flex items-center"><i class="fa-solid fa-trash-can mr-1"></i>刪除</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="flex justify-between items-center px-3 py-2 mb-3 bg-gray-50 rounded-xl border border-gray-100">
+                    <span class="text-xs font-bold text-gray-500">總計支出</span>
+                    <span class="font-black text-dark text-lg">¥${total.toLocaleString()}</span>
+                </div>
+                ${html}
+            `;
+        }
+
+        async function handleAddExpense(e) {
+            e.preventDefault();
+            const btn = document.getElementById('exp-submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>寫入中...';
+
+            const payload = {
+                parent: { database_id: DATABASE_ID },
+                properties: {
+                    "項目名稱": { title: [{ text: { content: document.getElementById('exp-title').value } }] },
+                    "金額": { number: parseInt(document.getElementById('exp-amount').value) || 0 },
+                    "付款人": { select: { name: document.getElementById('exp-payer').value } },
+                    "類別": { select: { name: document.getElementById('exp-category').value } },
+                    "日期": { date: { start: document.getElementById('exp-date').value } }
+                }
+            };
+
+            const note = document.getElementById('exp-note').value;
+            if (note) {
+                payload.properties["備註"] = { rich_text: [{ text: { content: note } }] };
+            }
+
+            try {
+                await notionRequest('pages', 'POST', payload);
+                document.getElementById('addExpenseForm').reset();
+                switchExpenseTab('list');
+            } catch (err) {
+                console.error(err);
+                alert('新增失敗，請檢查網路連線或 CORS Proxy 限制。');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '新增支出';
+            }
+        }
+
+        async function deleteExpense(id) {
+            if (!confirm('確定要刪除這筆支出嗎？此動作無法復原。')) return;
+            try {
+                await notionRequest(`pages/${id}`, 'PATCH', { archived: true });
+                // 刪除後自動重整列表
+                fetchExpenses();
+            } catch (err) {
+                console.error(err);
+                alert('刪除失敗');
+            }
+        }
+
+        function calculateSettlement() {
+            if (expenseList.length === 0 && document.getElementById('exp-panel-list').classList.contains('active')) return;
+            
+            const members = getMembers();
+            const numMembers = members.length;
+            if (numMembers === 0) return;
+
+            // 初始化餘額表
+            const balances = {};
+            const paid = {};
+            members.forEach(m => { balances[m] = 0; paid[m] = 0; });
+
+            let totalExp = 0;
+
+            expenseList.forEach(exp => {
+                const amount = exp.amount;
+                totalExp += amount;
+                
+                // 若付款人不在名單內，臨時加入
+                if (paid[exp.payer] === undefined) {
+                    paid[exp.payer] = 0;
+                    balances[exp.payer] = 0;
+                }
+                paid[exp.payer] += amount;
+                balances[exp.payer] += amount;
+
+                // 每筆支出由 "所有人" 平分
+                const splitAmount = amount / numMembers;
+                members.forEach(m => {
+                    balances[m] -= splitAmount;
+                });
+            });
+
+            // 繪製個人淨額
+            const balContainer = document.getElementById('settlement-balances');
+            if (balContainer) {
+                balContainer.innerHTML = Object.keys(balances).map(m => {
+                    const net = Math.round(balances[m] || 0);
+                    const paidAmt = Math.round(paid[m] || 0);
+                    const shouldPay = paidAmt - net; // 應分攤 = 已付 - 淨額
+                    
+                    let netClass = net > 0 ? 'text-green-600' : (net < 0 ? 'text-red-500' : 'text-gray-500');
+                    let netPrefix = net > 0 ? '+' : '';
+                    let netLabel = net > 0 ? '應收' : (net < 0 ? '應付' : '結清');
+                    
+                    return `
+                        <div class="bg-white p-3.5 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-center">
+                            <div>
+                                <div class="font-bold text-dark text-sm mb-1">${m}</div>
+                                <div class="text-[10px] text-gray-500 flex gap-2">
+                                    <span class="bg-gray-50 px-1.5 py-0.5 rounded">已付 ¥${paidAmt.toLocaleString()}</span>
+                                    <span class="bg-gray-50 px-1.5 py-0.5 rounded">應分攤 ¥${shouldPay.toLocaleString()}</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-[10px] font-bold ${netClass} mb-0.5">${netLabel}</div>
+                                <div class="font-black text-base ${netClass} tracking-tight">${netPrefix}${net.toLocaleString()}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // 最優化轉帳 (貪婪演算法)
+            const debtors = [];
+            const creditors = [];
+            
+            for (const m in balances) {
+                const b = Math.round(balances[m]);
+                if (b < 0) debtors.push({ name: m, amount: -b });
+                else if (b > 0) creditors.push({ name: m, amount: b });
+            }
+
+            debtors.sort((a, b) => b.amount - a.amount);
+            creditors.sort((a, b) => b.amount - a.amount);
+
+            const transfers = [];
+            let i = 0, j = 0;
+            
+            while (i < debtors.length && j < creditors.length) {
+                const amount = Math.min(debtors[i].amount, creditors[j].amount);
+                if (amount > 0) {
+                    transfers.push({
+                        from: debtors[i].name,
+                        to: creditors[j].name,
+                        amount: amount
+                    });
+                }
+                
+                debtors[i].amount -= amount;
+                creditors[j].amount -= amount;
+                
+                if (debtors[i].amount === 0) i++;
+                if (creditors[j].amount === 0) j++;
+            }
+
+            const trContainer = document.getElementById('settlement-transfers');
+            if (trContainer) {
+                if (transfers.length === 0) {
+                    trContainer.innerHTML = '<div class="text-center py-6 text-gray-400 text-xs bg-gray-50 rounded-2xl border border-dashed border-gray-200">目前無須轉帳，帳目都結清囉！🎉</div>';
+                } else {
+                    trContainer.innerHTML = transfers.map(t => `
+                        <div class="bg-gradient-to-r from-red-50 to-green-50 p-4 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-center">
+                            <div class="flex items-center text-sm font-bold">
+                                <span class="text-red-600 bg-white px-2 py-1 rounded shadow-sm">${t.from}</span>
+                                <i class="fa-solid fa-arrow-right-long text-gray-400 mx-3"></i>
+                                <span class="text-green-600 bg-white px-2 py-1 rounded shadow-sm">${t.to}</span>
+                            </div>
+                            <span class="font-black text-dark text-lg tracking-tight">¥${t.amount.toLocaleString()}</span>
+                        </div>
+                    `).join('');
+                }
             }
         }
 
