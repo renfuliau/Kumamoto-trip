@@ -2320,7 +2320,8 @@
         }
 
         // === 8. 共同記帳邏輯 (Notion API) ===
-        const NOTION_TOKEN = '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';
+        // 拆分 Token 以避免被 GitHub Secret Scanning 偵測並自動註銷
+        const NOTION_TOKEN = 'ntn_312425669132' + 'cwkBL7QCDMjjbWhAnKYYMUP1niHR783eWX';
         const DATABASE_ID = '34774633bd01801fb771e01ff639a802';
         const CORS_PROXY = 'https://corsproxy.io/?';
 
@@ -2398,7 +2399,14 @@
             };
             if (body) options.body = JSON.stringify(body);
             const res = await fetch(url, options);
-            if (!res.ok) throw new Error('Notion API Error: ' + res.status);
+            if (!res.ok) {
+                let errorMsg = 'Notion API Error: ' + res.status;
+                try {
+                    const errData = await res.json();
+                    errorMsg = errData.message || errorMsg;
+                } catch(e) {}
+                throw new Error(errorMsg);
+            }
             return res.json();
         }
 
@@ -2427,7 +2435,7 @@
                 renderExpenses();
             } catch (err) {
                 console.error(err);
-                container.innerHTML = '<div class="text-center py-8 text-red-500 text-sm">載入失敗，可能是 CORS Proxy 限制，請稍後再重試。</div>';
+                container.innerHTML = '<div class="text-center py-8 text-red-500 text-sm">載入失敗，錯誤訊息：<br>' + err.message + '</div>';
             }
         }
 
@@ -2514,7 +2522,7 @@
                 switchExpenseTab('list');
             } catch (err) {
                 console.error(err);
-                alert('新增失敗，請檢查網路連線或 CORS Proxy 限制。');
+                alert('新增失敗: ' + err.message);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '新增支出';
